@@ -1,0 +1,57 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>The HTML5 Herald</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+<style>
+#newplaylistdiv {
+display:none;
+}
+</style>
+
+</head>
+
+<body>
+
+
+<button type="button" onclick="newplaylist();">new playlist</button>
+<div id="newplaylistdiv"><textarea id="playlistinput" name="playlistinput" rows="4" cols="50"></textarea><button type="button" onclick="savenewplaylist();">save</button></div>
+<div id ="playlists"></div>
+
+  <script src="js/scripts.js"></script>
+  <script>
+	var currentplaylist;
+  
+	function newplaylist() {
+		//document.getElementById("parentID").innerHTML+= "new content"
+		//document.body.innerHTML+= '<textarea id="playlistinput" name="playlistinput" rows="4" cols="50"></textarea><button type="button" onclick="savenewplaylist();">save</button>';
+		var npdiv=document.getElementById("newplaylistdiv");
+		if (npdiv.style.display == "block") {
+			npdiv.style.display = "none";
+		} else npdiv.style.display = "block";
+	}
+
+	function savenewplaylist() {
+	var playlistinput = document.getElementById("playlistinput").value;
+	document.getElementById("playlists").innerHTML+= '<div><textarea class="playlist" name="playlistinput" rows="4" cols="50">'+playlistinput+'</textarea><button type="button" onclick="play(this);">play</button></div>';
+	document.getElementById("playlistinput").value = "";
+	document.getElementById("newplaylistdiv").style.display = "none";
+	}
+
+	function play(button) {
+		pdiv=button.parentNode;
+		ptextarea=pdiv.getElementsByClassName("playlist")[0];
+		currentplaylist = ptextarea;
+		//alert(ptextarea.value); //works
+		//TODO: display video
+	}
+  
+  </script>
+</body>
+</html>
