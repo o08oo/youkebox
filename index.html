@@ -13,6 +13,9 @@
 #newplaylistdiv {
 display:none;
 }
+iframe {
+z-index:2;
+}
 </style>
 
 </head>
@@ -48,8 +51,13 @@ display:none;
 		pdiv=button.parentNode;
 		ptextarea=pdiv.getElementsByClassName("playlist")[0];
 		currentplaylist = ptextarea;
+		
 		//alert(ptextarea.value); //works
-		//TODO: display video
+		//display video
+		var obj = {"video": {
+		  "value": "<iframe title='YouTube video player' type=\"text/html\" width='640' height='390' src='http://www.youtube.com/embed/W-Q7RMpINVo' frameborder='0' allowFullScreen></iframe>"
+		}}
+		document.write(obj.video.value);
 	}
   
   </script>
