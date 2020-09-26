@@ -4,32 +4,63 @@
 <head>
   <meta charset="utf-8">
 
-  <title>The HTML5 Herald</title>
+  <title>youkebox</title>
   <meta name="description" content="The HTML5 Herald">
   <meta name="author" content="SitePoint">
 
   <link rel="stylesheet" href="css/styles.css?v=1.0">
 <style>
+body {
+background:black;
+}
 #newplaylistdiv {
 display:none;
 }
-iframe {
-z-index:2;
+#sidebarimg {
+width:40px;
+filter: invert(1);
+padding:5px;
+}
+#allui{
+z-index:3;
+position: fixed;
+top: 0;
+left: 0;
+//background: rgba(0, 0, 0, 0.4);
+height:100%; width:400px;
+}
+#ui {
+display:none;
+}
+#video {
+z-index:1;
+position: fixed;
+top: 0;
+left: 0;
+width:100%;
+height:100%;
 }
 </style>
 
 </head>
 
 <body>
-
-
-<button type="button" onclick="newplaylist();">new playlist</button>
-<div id="newplaylistdiv"><textarea id="playlistinput" name="playlistinput" rows="4" cols="50"></textarea><button type="button" onclick="savenewplaylist();">save</button></div>
-<div id ="playlists"></div>
+<div id="allui">
+	<input type="image" id="sidebarimg" src="sidebar.png" onclick="showui()">
+	<div id="ui">
+		<button type="button" onclick="newplaylist();">new playlist</button>
+		<div id="newplaylistdiv"><textarea id="playlistinput" name="playlistinput" rows="4" cols="50"></textarea><button type="button" onclick="savenewplaylist();">save</button></div>
+		<div id ="playlists"></div>
+	</div>
+</div>
+<div id="video"></div>
 
   <script src="js/scripts.js"></script>
   <script>
 	var currentplaylist;
+	var currentplaylistsplit;
+	var currentpositiononplaylist;
+
   
 	function newplaylist() {
 		//document.getElementById("parentID").innerHTML+= "new content"
@@ -48,16 +79,40 @@ z-index:2;
 	}
 
 	function play(button) {
+		currentpositiononplaylist=0;
 		pdiv=button.parentNode;
 		ptextarea=pdiv.getElementsByClassName("playlist")[0];
 		currentplaylist = ptextarea;
+		currentplaylistsplit = ptextarea.value.split("\n");
+		var newurl = currentplaylistsplit[currentpositiononplaylist];
 		
 		//alert(ptextarea.value); //works
 		//display video
-		var obj = {"video": {
-		  "value": "<iframe title='YouTube video player' type=\"text/html\" width='640' height='390' src='http://www.youtube.com/embed/W-Q7RMpINVo' frameborder='0' allowFullScreen></iframe>"
-		}}
-		document.write(obj.video.value);
+		const videoId = getId(newurl);
+		const iframeMarkup = '<iframe width="100%" height="100%" src="//www.youtube.com/embed/' 
+			+ videoId + '" frameborder="0" allowfullscreen></iframe>';
+		//var videoobj = {"video": {
+	//	  "value": "<iframe title='YouTube video player' type=\"text/html\" width='640' height='390' src='"+newurl+"' frameborder='0' allowFullScreen></iframe>"
+	//	}}
+		document.getElementById("video").innerHTML=iframeMarkup;
+		
+		
+	}
+	function getId(url) {
+		const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+		const match = url.match(regExp);
+
+		return (match && match[2].length === 11)
+		  ? match[2]
+		  : null;
+	}
+	
+	function showui() {
+	var npdiv=document.getElementById("ui");
+		if (npdiv.style.display == "block") {
+			npdiv.style.display = "none";
+		} else npdiv.style.display = "block";
+	
 	}
   
   </script>
