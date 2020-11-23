@@ -10,6 +10,14 @@
 
   <link rel="stylesheet" href="css/styles.css?v=1.0">
 <style>
+html,body {
+top: 0;
+left: 0;
+width:100%;
+height:100%;
+margin:0;
+padding:0;
+}
 body {
 background:black;
 }
@@ -27,7 +35,7 @@ position: fixed;
 top: 0;
 left: 0;
 //background: rgba(0, 0, 0, 0.4);
-height:100%; width:400px;
+height:90%; width:400px; // height not 100 because it blocks the video buttons
 }
 #ui {
 display:none;
@@ -73,13 +81,13 @@ height:100%;
 
 	function savenewplaylist() {
 	var playlistinput = document.getElementById("playlistinput").value;
-	document.getElementById("playlists").innerHTML+= '<div><textarea class="playlist" name="playlistinput" rows="4" cols="50">'+playlistinput+'</textarea><button type="button" onclick="play(this);">play</button></div>';
+	document.getElementById("playlists").innerHTML+= '<div><textarea class="playlist" name="playlistinput" rows="4" cols="50">'+playlistinput+'</textarea><button type="button" onclick="play2(this);">play</button></div>';
 	document.getElementById("playlistinput").value = "";
 	document.getElementById("newplaylistdiv").style.display = "none";
 	}
-
+currentpositiononplaylist=0;
 	function play(button) {
-		currentpositiononplaylist=0;
+		//currentpositiononplaylist=0;
 		pdiv=button.parentNode;
 		ptextarea=pdiv.getElementsByClassName("playlist")[0];
 		currentplaylist = ptextarea;
@@ -97,9 +105,43 @@ height:100%;
 	//	}}
 		////document.getElementById("video").innerHTML=iframeMarkup;
 		var obj = {"video": {
-  "value": "<iframe title='YouTube video player' type=\"text/html\" width='100%' height='100%' src='http://www.youtube.com/embed/"+videoId+"' frameborder='0' allowFullScreen></iframe>"
+  "value": "<iframe id='videoembed' title='YouTube video player' type=\"text/html\" width='100%' height='100%' src='http://www.youtube.com/embed/"+videoId+"' frameborder='0' allowFullScreen></iframe>"
 }}
 ////document.write(obj.video.value);
+document.getElementById("video").innerHTML=obj.video.value;
+		
+		
+	}
+	
+		function play2(button) {
+		//currentpositiononplaylist=0;
+		pdiv=button.parentNode;
+		ptextarea=pdiv.getElementsByClassName("playlist")[0];
+		currentplaylist = ptextarea;
+		currentplaylistsplit = ptextarea.value.split("\n");
+		var newurl = currentplaylistsplit[0];
+		
+		//alert(ptextarea.value); //works
+		//display video
+		var idlist = "";
+		for (i = 1; i < currentplaylistsplit.length; i++) {
+		 var newurl2 = currentplaylistsplit[i];
+		 const videoId = youtube_parser(newurl2);
+		 idlist+=videoId+",";
+		} 
+		const videoId = youtube_parser(newurl);
+		//alert(videoId);
+		////const iframeMarkup = '<iframe width="100%" height="100%" src="//www.youtube.com/embed/' 
+		////	+ videoId + '" frameborder="0" allowfullscreen></iframe>';
+		//var videoobj = {"video": {
+	//	  "value": "<iframe title='YouTube video player' type=\"text/html\" width='640' height='390' src='"+newurl+"' frameborder='0' allowFullScreen></iframe>"
+	//	}}
+		////document.getElementById("video").innerHTML=iframeMarkup;
+		var obj = {"video": {
+  "value": "<iframe id='videoembed' title='YouTube video player' type=\"text/html\" width='100%' height='100%' src='https://www.youtube.com/embed/"+videoId+"?loop=0&enablejsapi=1&playlist="+idlist+"' frameborder='0' allowFullScreen></iframe>"
+}}
+////document.write(obj.video.value);
+alert(obj.video.value);
 document.getElementById("video").innerHTML=obj.video.value;
 		
 		
